@@ -20,8 +20,8 @@ profile = False
 #-----------------------------------------------------------------------------#
 # Specify model and table locations here
 #-----------------------------------------------------------------------------#
-path_to_models = '/db/pretrained-model/'
-path_to_tables = '/db/pretrained-model/'
+path_to_models = 'db/pretrained-model/'
+path_to_tables = 'db/pretrained-model/'
 #-----------------------------------------------------------------------------#
 
 path_to_umodel = path_to_models + 'uni_skip.npz'

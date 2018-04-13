@@ -259,7 +259,7 @@ def trainer(train, dev, # training and development tuples
             optimizer='adam',
             batch_size = 100,
             valid_batch_size = 100,
-            saveto='/ais/gobi3/u/rkiros/ssg/models/cocorank1000_combine.npz',
+            saveto='./db/pretrained-model/ssg/models/cocorank1000_combine.npz',
             validFreq=500,
             saveFreq=500,
             reload_=False):
