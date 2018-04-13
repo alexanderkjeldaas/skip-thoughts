@@ -48,7 +48,7 @@ def load_model():
     btparams = init_tparams(bparams)
 
     # Extractor functions
-    print( 'Compiling encoders...')
+    print('Compiling encoders...')
     embedding, x_mask, ctxw2v = build_encoder(utparams, uoptions)
     f_w2v = theano.function([embedding, x_mask], ctxw2v, name='f_w2v')
     embedding, x_mask, ctxw2v = build_encoder_bi(btparams, boptions)
@@ -82,8 +82,8 @@ def load_tables():
     for line in f:
         words.append(line.decode('utf-8').strip())
     f.close()
-    utable = OrderedDict(zip(words, utable))
-    btable = OrderedDict(zip(words, btable))
+    utable = OrderedDict(list(zip(words, utable)))
+    btable = OrderedDict(list(zip(words, btable)))
     return utable, btable
 
 
@@ -111,7 +111,7 @@ def encode(model, X, use_norm=True, verbose=True, batch_size=128, use_eos=False)
 
     # word dictionary and init
     d = defaultdict(lambda : 0)
-    for w in model['utable'].keys():
+    for w in list(model['utable'].keys()):
         d[w] = 1
     ufeatures = numpy.zeros((len(X), model['uoptions']['dim']), dtype='float32')
     bfeatures = numpy.zeros((len(X), 2 * model['boptions']['dim']), dtype='float32')
@@ -123,7 +123,7 @@ def encode(model, X, use_norm=True, verbose=True, batch_size=128, use_eos=False)
         ds[len(s)].append(i)
 
     # Get features. This encodes by length, in order to avoid wasting computation
-    for k in ds.keys():
+    for k in list(ds.keys()):
         if verbose:
             print( k)
         numbatches = int(len(ds[k]) / batch_size) + 1
@@ -195,10 +195,10 @@ def nn(model, text, vectors, query, k=5):
     scores = numpy.dot(qf, vectors.T).flatten()
     sorted_args = numpy.argsort(scores)[::-1]
     sentences = [text[a] for a in sorted_args[:k]]
-    print( 'QUERY: ' + query)
-    print( 'NEAREST: ')
+    print('QUERY: ' + query)
+    print('NEAREST: ')
     for i, s in enumerate(sentences):
-        print( s, sorted_args[i])
+        print(s, sorted_args[i])
 
 
 def word_features(table):
@@ -206,7 +206,7 @@ def word_features(table):
     Extract word features into a normalized matrix
     """
     features = numpy.zeros((len(table), 620), dtype='float32')
-    keys = table.keys()
+    keys = list(table.keys())
     for i in range(len(table)):
         f = table[keys[i]]
         features[i] = f / norm(f)
@@ -217,7 +217,7 @@ def nn_words(table, wordvecs, query, k=10):
     """
     Get the nearest neighbour words
     """
-    keys = table.keys()
+    keys = list(table.keys())
     qf = table[query]
     scores = numpy.dot(qf, wordvecs.T).flatten()
     sorted_args = numpy.argsort(scores)[::-1]
@@ -226,6 +226,7 @@ def nn_words(table, wordvecs, query, k=10):
     print( 'NEAREST: ')
     for i, w in enumerate(words):
         print( w)
+
 
 
 def _p(pp, name):
